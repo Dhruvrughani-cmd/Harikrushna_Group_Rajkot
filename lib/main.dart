@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
-
+import 'screens/booking_form.dart';
+import 'screens/review_details_screen.dart';
+import 'screens/summary_screen.dart';
 void main() => runApp(const HarikrushnaApp());
 
 class HarikrushnaApp extends StatelessWidget {
@@ -23,6 +25,9 @@ class HarikrushnaApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
+        '/booking': (context) => const BookingForm(),
+      '/review': (context) => const ReviewDetailsScreen(),
+      '/summary': (context) => const SummaryScreen(),
       },
     );
   }
