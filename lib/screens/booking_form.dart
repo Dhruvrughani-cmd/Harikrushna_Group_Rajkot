@@ -15,7 +15,7 @@ class _BookingFormState extends State<BookingForm> {
   
   // આધાર કાર્ડના નંબર સાચવવા માટે
   List<TextEditingController> aadhaarControllers = [TextEditingController()];
-
+final TextEditingController nameController = TextEditingController();
   void _updateGuests(int delta) {
     setState(() {
       int newCount = guestCount + delta;
@@ -38,7 +38,10 @@ class _BookingFormState extends State<BookingForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text("FULL NAME"),
-            const TextField(decoration: InputDecoration(hintText: "Enter your full name")),
+             TextField(
+               controller: nameController, 
+               decoration: const InputDecoration(hintText: "Enter your full name")
+),
             const SizedBox(height: 20),
             Row(
               children: [
@@ -279,13 +282,36 @@ class _BookingFormState extends State<BookingForm> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {}, // રીવ્યુ પેજ આના પછી આવશે
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE67E22),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                child: const Text("Review Booking", style: TextStyle(color: Colors.white, fontSize: 18)),
-              ),
+                // 'Review Booking' બટન શોધો અને તેનો onPressed આ રીતે બદલો:
+ElevatedButton(
+  onPressed: () {
+    // વેલિડેશન: જો ચેક-ઈન અને ચેક-આઉટ બંને તારીખ પસંદ કરી હોય તો જ આગળ જશે
+    if (checkIn != null && checkOut != null) {
+      Navigator.pushNamed(context, '/review', arguments: {
+        'name': nameController.text,
+        'mobile': mobile, // આ હોમ સ્ક્રીન પરથી આવેલો નંબર છે
+        'guestCount': guestCount,
+        'aadhaar': aadhaarControllers.map((c) => c.text).toList(),
+        'checkIn': checkIn,
+        'checkOut': checkOut,
+      });
+    } else {
+      // જો તારીખ પસંદ કરવાની બાકી હોય તો નીચે મેસેજ (SnackBar) બતાવશે
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("કૃપા કરીને ચેક-ઈન અને ચેક-આઉટ તારીખ પસંદ કરો"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFFE67E22),
+    padding: const EdgeInsets.symmetric(vertical: 15),
+  ),
+  child: const Text("Review Booking", style: TextStyle(color: Colors.white, fontSize: 18)),
+), // રીવ્યુ પેજ આના પછી આવશે
+                
             ),
           ],
         ),
