@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
+
+void main() => runApp(const HarikrushnaApp());
+
+class HarikrushnaApp extends StatelessWidget {
+  const HarikrushnaApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Harikrushna Group Rajkot',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFFFEFDF8), 
+        primaryColor: const Color(0xFFE67E22), 
+        textTheme: GoogleFonts.loraTextTheme(), 
+        useMaterial3: true,
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
+      },
+    );
+  }
+}
