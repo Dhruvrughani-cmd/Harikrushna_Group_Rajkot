@@ -1,0 +1,17 @@
+name: harikrushna_group_rajkot
+description: Hotel Booking App for Harikrushna Group.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^5.1.0
+  intl: ^0.18.1
+  http: ^1.1.0
+
+flutter:
+  uses-material-design: true
