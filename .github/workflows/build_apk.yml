@@ -26,8 +26,8 @@ jobs:
         run: flutter pub get
 
       - name: Recreate Android files
-        # આ લાઇન ખૂટતી એન્ડ્રોઇડ ફાઇલો ઓટોમેટિક બનાવી દેશે
-        run: flutter create . --platforms android
+        # નામમાં કેપિટલ અક્ષરોને કારણે આવતી એરર આનાથી સોલ્વ થઈ જશે
+        run: flutter create . --project-name=harikrushna_group_rajkot --platforms android
 
       - name: Build APK
         run: flutter build apk --debug
