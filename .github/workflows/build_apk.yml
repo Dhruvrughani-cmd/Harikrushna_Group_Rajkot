@@ -25,9 +25,11 @@ jobs:
       - name: Recreate Android files
         run: flutter create . --project-name=harikrushna_group_rajkot --platforms android
 
-      - name: Fix minSdkVersion for Firebase
-        # આ લાઇન android/app/build.gradle માં જઈને ૨૧ સેટ કરી દેશે
-        run: sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' android/app/build.gradle
+      - name: Fix Android Settings (Firebase Support)
+        # આ લાઇન minSdkVersion ને ૨૧ કરશે અને multiDex ચાલુ કરી દેશે
+        run: |
+          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' android/app/build.gradle
+          sed -i 's/targetSdkVersion flutter.targetSdkVersion/targetSdkVersion flutter.targetSdkVersion\n        multiDexEnabled true/g' android/app/build.gradle
 
       - name: Get dependencies
         run: flutter pub get
