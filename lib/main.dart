@@ -7,8 +7,10 @@ import 'screens/booking_form.dart';
 import 'screens/review_details_screen.dart';
 import 'screens/summary_screen.dart';
 import 'screens/admin_dashboard.dart';
+import 'services/notification_service.dart';
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // આ લાઇન જરૂરી છે
+  WidgetsFlutterBinding.ensureInitialized(); 
+  await NotificationService.requestNotificationPermission();
   await Firebase.initializeApp(); // આના વગર Firestore કામ નહીં કરે
   runApp(const HarikrushnaApp());
 }
