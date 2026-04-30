@@ -26,7 +26,7 @@ jobs:
         run: flutter create . --project-name=harikrushna_group_rajkot --platforms android
 
       - name: Fix minSdkVersion for Firebase
-        # Firestore માટે minSdkVersion ૨૧ હોવી જ જોઈએ, આ લાઈન એ સુધારી દેશે
+        # આ લાઇન android/app/build.gradle માં જઈને ૨૧ સેટ કરી દેશે
         run: sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' android/app/build.gradle
 
       - name: Get dependencies
