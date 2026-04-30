@@ -40,7 +40,3 @@ jobs:
         with:
           name: hotel-app-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
-        uses: actions/upload-artifact@v4
-        with:
-          name: hotel-app-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
