@@ -6,6 +6,7 @@ import 'screens/home_screen.dart';
 import 'screens/booking_form.dart';
 import 'screens/review_details_screen.dart';
 import 'screens/summary_screen.dart';
+import 'screens/admin_dashboard.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // આ લાઇન જરૂરી છે
   await Firebase.initializeApp(); // આના વગર Firestore કામ નહીં કરે
@@ -27,6 +28,7 @@ class HarikrushnaApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
+        '/admin': (context) => const AdminDashboard(),
         '/': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
         '/booking': (context) => const BookingForm(),
