@@ -9,10 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  # વર્ઝન 4 કર્યું
+      - uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v4 # વર્ઝન 4 કર્યું
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -25,11 +25,15 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Recreate Android files
+        # આ લાઇન ખૂટતી એન્ડ્રોઇડ ફાઇલો ઓટોમેટિક બનાવી દેશે
+        run: flutter create . --platforms android
+
       - name: Build APK
         run: flutter build apk --debug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4 # આ મુખ્ય સુધારો છે (v3 ની જગ્યાએ v4)
+        uses: actions/upload-artifact@v4
         with:
           name: hotel-app-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
