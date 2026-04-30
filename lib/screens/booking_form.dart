@@ -9,193 +9,67 @@ class BookingForm extends StatefulWidget {
 }
 
 class _BookingFormState extends State<BookingForm> {
-  int guestCount = 1; // ડિફોલ્ટ ૧ વ્યક્તિ
+  // --- વેરિયેબલ્સ સેટઅપ ---
+  int guestCount = 1; 
   DateTime? checkIn;
   DateTime? checkOut;
   
-  // આધાર કાર્ડના નંબર સાચવવા માટે
+  // ડાયનેમિક લિસ્ટ: જેટલા મહેમાન એટલા આધાર કાર્ડ કંટ્રોલર
   List<TextEditingController> aadhaarControllers = [TextEditingController()];
-final TextEditingController nameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+
+  // --- ગેસ્ટની સંખ્યા અપડેટ કરવાનું લોજિક ---
   void _updateGuests(int delta) {
     setState(() {
       int newCount = guestCount + delta;
       if (newCount >= 1 && newCount <= 3) {
         guestCount = newCount;
         if (delta > 0) {
+          // નવો મહેમાન ઉમેરાય તો નવું ટેક્સ્ટ બોક્સ આપો
           aadhaarControllers.add(TextEditingController());
         } else {
+          // મહેમાન ઓછો થાય તો છેલ્લું બોક્સ કાઢી નાખો
           aadhaarControllers.removeLast();
         }
-        @override
-  Widget build(BuildContext context) {
-    final String mobile = ModalRoute.of(context)!.settings.arguments as String? ?? "9033291948";
-
-    return Scaffold(
-      appBar: AppBar(title: const Text("Reservation Details")),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("FULL NAME"),
-             TextField(
-               controller: nameController, 
-               decoration: const InputDecoration(hintText: "Enter your full name")
-),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("MOBILE NUMBER"),
-                      const SizedBox(height: 10),
-                      Text(mobile, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("NUMBER OF GUESTS"),
-                      Row(
-                        children: [
-                          Text("$guestCount", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                          const SizedBox(width: 10),
-                          Column(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.arrow_drop_up, size: 30),
-                                onPressed: guestCount < 3 ? () => _updateGuests(1) : null,
-                              ),
-                              if (guestCount > 1)
-                                IconButton(
-                                  icon: const Icon(Icons.arrow_drop_down, size: 30),
-                                  onPressed: () => _updateGuests(-1),
-                                ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Text("Guest Aadhaar Details", style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            ...List.generate(guestCount, (index) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: TextField(
-                controller: aadhaarControllers[index],
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Guest ${index + 1} Aadhaar Number",
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-            )),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("CHECK-IN DATE"),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(checkIn == null ? "dd-mm-yyyy" : DateFormat('dd-MM-yyyy').format(checkIn!)),
-                        trailing: const Icon(Icons.calendar_today_outlined),
-                        onTap: _selectCheckIn,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("CHECK-OUT DATE"),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(checkOut == null ? "dd-mm-yyyy" : DateFormat('dd-MM-yyyy').format(checkOut!)),
-                        trailing: const Icon(Icons.calendar_today_outlined),
-                        onTap: _selectCheckOut,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {}, 
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE67E22),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                child: const Text("Review Booking", style: TextStyle(color: Colors.white, fontSize: 18)),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // --- તારીખનું લોજિક ---
-  Future<void> _selectCheckIn() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(), // આજથી પહેલાની તારીખ નહીં
-      lastDate: DateTime.now().add(const Duration(days: 60)), // ૨ મહિનાની મર્યાદા
-    );
-    if (picked != null) setState(() => checkIn = picked);
-  }
-
-  Future<void> _selectCheckOut() async {
-    if (checkIn == null) return;
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: checkIn!.add(const Duration(days: 1)),
-      firstDate: checkIn!.add(const Duration(days: 1)),
-      lastDate: checkIn!.add(const Duration(days: 2)), // ૨ દિવસની મર્યાદા
-    );
-    if (picked != null) setState(() => checkOut = picked);
-  }
-}
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // હોમ પેજ પરથી આવતો મોબાઈલ નંબર (જો ના હોય તો ડિફોલ્ટ નંબર)
     final String mobile = ModalRoute.of(context)!.settings.arguments as String? ?? "9033291948";
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Reservation Details")),
+      appBar: AppBar(
+        title: const Text("Reservation Details"),
+        backgroundColor: const Color(0xFFE67E22),
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("FULL NAME"),
-            const TextField(decoration: InputDecoration(hintText: "Enter your full name")),
-            const SizedBox(height: 20),
+            // ૧. નામ એન્ટ્રી
+            const Text("FULL NAME", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+            TextField(
+              controller: nameController, 
+              decoration: const InputDecoration(
+                hintText: "Enter your full name",
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFE67E22))),
+              ),
+            ),
+            const SizedBox(height: 25),
+
+            // ૨. મોબાઈલ અને ગેસ્ટ સિલેક્શન રો (Row)
             Row(
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("MOBILE NUMBER"),
+                      const Text("MOBILE NUMBER", style: TextStyle(color: Colors.grey)),
                       const SizedBox(height: 10),
                       Text(mobile, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
@@ -205,20 +79,20 @@ final TextEditingController nameController = TextEditingController();
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("NUMBER OF GUESTS"),
+                      const Text("NUMBER OF GUESTS", style: TextStyle(color: Colors.grey)),
                       Row(
                         children: [
-                          Text("$guestCount", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                          const SizedBox(width: 10),
+                          Text("$guestCount", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                          const SizedBox(width: 15),
                           Column(
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.arrow_drop_up, size: 30),
+                                icon: const Icon(Icons.arrow_drop_up, size: 35, color: Colors.green),
                                 onPressed: guestCount < 3 ? () => _updateGuests(1) : null,
                               ),
                               if (guestCount > 1)
                                 IconButton(
-                                  icon: const Icon(Icons.arrow_drop_down, size: 30),
+                                  icon: const Icon(Icons.arrow_drop_down, size: 35, color: Colors.red),
                                   onPressed: () => _updateGuests(-1),
                                 ),
                             ],
@@ -230,88 +104,53 @@ final TextEditingController nameController = TextEditingController();
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            const Text("Guest Aadhaar Details", style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            // ડાયનેમિક આધાર કાર્ડ ફિલ્ડ્સ
+            const SizedBox(height: 25),
+
+            // ૩. આધાર કાર્ડની વિગતો (જેટલા ગેસ્ટ હોય એટલા બોક્સ દેખાશે)
+            const Text("Guest Aadhaar Details", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            const SizedBox(height: 15),
             ...List.generate(guestCount, (index) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 12),
               child: TextField(
                 controller: aadhaarControllers[index],
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: "Guest ${index + 1} Aadhaar Number",
+                  labelText: "Guest ${index + 1} Aadhaar Number",
+                  hintText: "12 digit number",
                   border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.credit_card),
                 ),
               ),
             )),
-            const SizedBox(height: 20),
+            const SizedBox(height: 25),
+
+            // ૪. તારીખ પસંદગી
             Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("CHECK-IN DATE"),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(checkIn == null ? "dd-mm-yyyy" : DateFormat('dd-MM-yyyy').format(checkIn!)),
-                        trailing: const Icon(Icons.calendar_today_outlined),
-                        onTap: _selectCheckIn,
-                      ),
-                    ],
-                  ),
+                  child: _datePickerColumn("CHECK-IN DATE", checkIn, _selectCheckIn),
                 ),
+                const SizedBox(width: 20),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("CHECK-OUT DATE"),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(checkOut == null ? "dd-mm-yyyy" : DateFormat('dd-MM-yyyy').format(checkOut!)),
-                        trailing: const Icon(Icons.calendar_today_outlined),
-                        onTap: _selectCheckOut,
-                      ),
-                    ],
-                  ),
+                  child: _datePickerColumn("CHECK-OUT DATE", checkOut, _selectCheckOut),
                 ),
               ],
             ),
-            const SizedBox(height: 40),
+            
+            const SizedBox(height: 50),
+
+            // ૫. રિવ્યુ બટન
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                // 'Review Booking' બટન શોધો અને તેનો onPressed આ રીતે બદલો:
-ElevatedButton(
-  onPressed: () {
-    // વેલિડેશન: જો ચેક-ઈન અને ચેક-આઉટ બંને તારીખ પસંદ કરી હોય તો જ આગળ જશે
-    if (checkIn != null && checkOut != null) {
-      Navigator.pushNamed(context, '/review', arguments: {
-        'name': nameController.text,
-        'mobile': mobile, // આ હોમ સ્ક્રીન પરથી આવેલો નંબર છે
-        'guestCount': guestCount,
-        'aadhaar': aadhaarControllers.map((c) => c.text).toList(),
-        'checkIn': checkIn,
-        'checkOut': checkOut,
-      });
-    } else {
-      // જો તારીખ પસંદ કરવાની બાકી હોય તો નીચે મેસેજ (SnackBar) બતાવશે
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("કૃપા કરીને ચેક-ઈન અને ચેક-આઉટ તારીખ પસંદ કરો"),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
-    }
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFFE67E22),
-    padding: const EdgeInsets.symmetric(vertical: 15),
-  ),
-  child: const Text("Review Booking", style: TextStyle(color: Colors.white, fontSize: 18)),
-), // રીવ્યુ પેજ આના પછી આવશે
-                
+                onPressed: _handleReviewBooking, 
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFE67E22),
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: const Text("Review Booking", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
             ),
           ],
         ),
@@ -319,24 +158,70 @@ ElevatedButton(
     );
   }
 
+  // --- હેલ્પર વિજેટ: તારીખના બોક્સ માટે ---
+  Widget _datePickerColumn(String label, DateTime? date, VoidCallback onTap) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.black12))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(date == null ? "dd-mm-yyyy" : DateFormat('dd-MM-yyyy').format(date), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                const Icon(Icons.calendar_today_outlined, size: 18, color: Color(0xFFE67E22)),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // --- તારીખ પસંદ કરવાનું લોજિક ---
   Future<void> _selectCheckIn() async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now(), // આજની પહેલાની તારીખ નહીં પસંદ થાય
-      lastDate: DateTime.now().add(const Duration(days: 60)), // ૨ મહિના સુધીની મર્યાદા
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 60)),
     );
     if (picked != null) setState(() => checkIn = picked);
   }
 
   Future<void> _selectCheckOut() async {
-    if (checkIn == null) return;
+    if (checkIn == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("કૃપા કરીને પહેલા ચેક-ઈન તારીખ પસંદ કરો")));
+      return;
+    }
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: checkIn!.add(const Duration(days: 1)),
       firstDate: checkIn!.add(const Duration(days: 1)),
-      lastDate: checkIn!.add(const Duration(days: 2)), // ૨ દિવસની મર્યાદા
+      lastDate: checkIn!.add(const Duration(days: 10)),
     );
     if (picked != null) setState(() => checkOut = picked);
+  }
+
+  // --- બટન દબાવતા શું થશે ---
+  void _handleReviewBooking() {
+    if (checkIn != null && checkOut != null && nameController.text.isNotEmpty) {
+      Navigator.pushNamed(context, '/review', arguments: {
+        'name': nameController.text,
+        'mobile': "9033291948", // તમે જે નંબર સેટ કર્યો છે તે
+        'guestCount': guestCount,
+        'aadhaar': aadhaarControllers.map((c) => c.text).toList(),
+        'checkIn': checkIn,
+        'checkOut': checkOut,
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("કૃપા કરીને બધી જ વિગતો ભરો"), backgroundColor: Colors.redAccent),
+      );
+    }
   }
 }
