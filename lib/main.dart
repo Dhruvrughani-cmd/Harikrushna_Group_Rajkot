@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_screen.dart';
@@ -5,8 +6,11 @@ import 'screens/home_screen.dart';
 import 'screens/booking_form.dart';
 import 'screens/review_details_screen.dart';
 import 'screens/summary_screen.dart';
-void main() => runApp(const HarikrushnaApp());
-
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // આ લાઇન જરૂરી છે
+  await Firebase.initializeApp(); // આના વગર Firestore કામ નહીં કરે
+  runApp(const HarikrushnaApp());
+}
 class HarikrushnaApp extends StatelessWidget {
   const HarikrushnaApp({super.key});
 
