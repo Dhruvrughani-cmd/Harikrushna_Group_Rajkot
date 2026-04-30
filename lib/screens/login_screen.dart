@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _phoneController = TextEditingController();
+
+  // ૧. એડમિન નંબર્સની લિસ્ટ
+  final List<String> adminNumbers = ['94097773955', '8799651611'];
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: BoxDecoration(
             color: Colors.white, 
             borderRadius: BorderRadius.circular(20), 
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)]
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)]
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -41,9 +45,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // જો નંબર ૧૦ આંકડાનો હોય તો જ હોમ પેજ પર જવા દેશે
-                    if (_phoneController.text.length == 10) {
-                      Navigator.pushReplacementNamed(context, '/home', arguments: _phoneController.text);
+                    String phoneNumber = _phoneController.text.trim();
+
+                    // ૨. લોજિક: જો ૧૦ આંકડા હોય તો જ આગળ વધશે
+                    if (phoneNumber.length == 10) {
+                      // ૩. ચેક કરો કે નંબર એડમિન લિસ્ટમાં છે કે નહીં
+                      if (adminNumbers.contains(phoneNumber)) {
+                        // એડમિન ડેશબોર્ડ પર મોકલો
+                        Navigator.pushReplacementNamed(context, '/admin', arguments: phoneNumber);
+                      } else {
+                        // સામાન્ય યુઝરને હોમ પેજ પર મોકલો
+                        Navigator.pushReplacementNamed(context, '/home', arguments: phoneNumber);
+                      }
+                    } else {
+                      // જો નંબર ૧૦ આંકડાનો ન હોય તો મેસેજ બતાવશે
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please enter a valid 10-digit number"))
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE67E22)),
@@ -51,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 15),
+              // અહીં ક્લિક કરવાથી સીધું એડમિન લોગિનનો કોઈ અલગ રસ્તો રાખવાની હવે જરૂર નથી કારણ કે આપણે ઉપર જ લોજિક સેટ કરી દીધું છે.
               const Text("Admin Login", style: TextStyle(color: Color(0xFFE67E22), fontWeight: FontWeight.bold)),
             ],
           ),
