@@ -3,16 +3,16 @@ name: Build Android APK
 on:
   push:
     branches:
-      - main  # જ્યારે તમે કોડ સેવ કરો ત્યારે આ રન થશે
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4  # વર્ઝન 4 કર્યું
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4 # વર્ઝન 4 કર્યું
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -20,16 +20,16 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0' # અથવા તમારું વર્ઝન
+          flutter-version: '3.19.0'
 
       - name: Get dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --debug # ટેસ્ટિંગ માટે ડેબગ APK
+        run: flutter build apk --debug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # આ મુખ્ય સુધારો છે (v3 ની જગ્યાએ v4)
         with:
           name: hotel-app-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
