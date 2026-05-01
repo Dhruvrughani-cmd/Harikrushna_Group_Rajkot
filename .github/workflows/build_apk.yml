@@ -8,33 +8,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # Node.js ની વોર્નિંગ દૂર કરવા માટે આ લાઈન ઉમેરી છે
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin' # 'zulu' કરતા 'temurin' વધુ સ્ટેબલ છે
           java-version: '17'
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
-
-      - name: Recreate Android files
-        run: flutter create . --project-name=harikrushna_group_rajkot --platforms android
-
-      - name: Fix Android Settings (Firebase Support)
-        # આ લાઇન minSdkVersion ને ૨૧ કરશે અને multiDex ચાલુ કરી દેશે
-        run: |
-          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' android/app/build.gradle
-          sed -i 's/targetSdkVersion flutter.targetSdkVersion/targetSdkVersion flutter.targetSdkVersion\n        multiDexEnabled true/g' android/app/build.gradle
+          channel: 'stable' # ચોક્કસ વર્ઝન કરતા સ્ટેબલ ચેનલ વધુ સારી રહેશે
 
       - name: Get dependencies
         run: flutter pub get
 
       - name: Build APK
+        # આપણે મેન્યુઅલી બધું સેટ કર્યું હોવાથી સીધું બિલ્ડ કરી શકાય
         run: flutter build apk --debug
 
       - name: Upload APK
