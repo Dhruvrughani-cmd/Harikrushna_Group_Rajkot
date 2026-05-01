@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+// આ લાઈન ખાસ ઉમેરી છે
+import 'screens/splash_screen.dart'; 
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/booking_form.dart';
@@ -8,6 +10,7 @@ import 'screens/review_details_screen.dart';
 import 'screens/summary_screen.dart';
 import 'screens/admin_dashboard.dart';
 import 'services/notification_service.dart';
+
 void main() async {
   // ફ્લટર એન્જિન તૈયાર કરો
   WidgetsFlutterBinding.ensureInitialized(); 
@@ -30,6 +33,7 @@ void main() async {
   // ૩. એપ શરૂ કરો
   runApp(const HarikrushnaApp());
 }
+
 class HarikrushnaApp extends StatelessWidget {
   const HarikrushnaApp({super.key});
 
@@ -44,14 +48,16 @@ class HarikrushnaApp extends StatelessWidget {
         textTheme: GoogleFonts.loraTextTheme(), 
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      // અહીં ફેરફાર કર્યો છે: '/' ને બદલે '/splash' કર્યું છે
+      initialRoute: '/splash', 
       routes: {
+        '/splash': (context) => const SplashScreen(), // નવી સ્પ્લેશ સ્ક્રીન
         '/admin': (context) => const AdminDashboard(),
         '/': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
         '/booking': (context) => const BookingForm(),
-      '/review': (context) => const ReviewDetailsScreen(),
-      '/summary': (context) => const SummaryScreen(),
+        '/review': (context) => const ReviewDetailsScreen(),
+        '/summary': (context) => const SummaryScreen(),
       },
     );
   }
