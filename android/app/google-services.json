@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "506361913308",
+    "project_id": "gen-lang-client-0651546272",
+    "storage_bucket": "gen-lang-client-0651546272.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506361913308:android:0148f546a6779be793b919",
+        "android_client_info": {
+          "package_name": "com.harikrushna.group"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506361913308-0nhrqdhra3lji6p7eh9sh7j51japbcth.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO_b2jO1HQIF0rZmOgq0WzkbiLcu3d7RE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506361913308-0nhrqdhra3lji6p7eh9sh7j51japbcth.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
