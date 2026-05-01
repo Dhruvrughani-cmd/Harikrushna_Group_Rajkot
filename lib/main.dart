@@ -9,9 +9,25 @@ import 'screens/summary_screen.dart';
 import 'screens/admin_dashboard.dart';
 import 'services/notification_service.dart';
 void main() async {
+  // ફ્લટર એન્જિન તૈયાર કરો
   WidgetsFlutterBinding.ensureInitialized(); 
-  await NotificationService.requestNotificationPermission();
-  await Firebase.initializeApp(); // આના વગર Firestore કામ નહીં કરે
+  
+  // ૧. ફાયરબેઝ લોડ કરો (સુરક્ષિત રીતે)
+  try {
+    await Firebase.initializeApp(); 
+    debugPrint("Firebase successfully connected!");
+  } catch (e) {
+    debugPrint("Firebase connection failed: $e");
+  }
+
+  // ૨. પરમિશન લોડ કરો
+  try {
+    await NotificationService.requestNotificationPermission();
+  } catch (e) {
+    debugPrint("Permission error: $e");
+  }
+
+  // ૩. એપ શરૂ કરો
   runApp(const HarikrushnaApp());
 }
 class HarikrushnaApp extends StatelessWidget {
