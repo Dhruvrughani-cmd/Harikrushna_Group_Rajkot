@@ -1,41 +1,30 @@
 name: Build Android APK
-
 on:
   push:
     branches:
       - main
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    # Node.js ની વોર્નિંગ દૂર કરવા માટે આ લાઈન ઉમેરી છે
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin' # 'zulu' કરતા 'temurin' વધુ સ્ટેબલ છે
+          distribution: 'temurin'
           java-version: '17'
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable' # ચોક્કસ વર્ઝન કરતા સ્ટેબલ ચેનલ વધુ સારી રહેશે
-
+          channel: 'stable'
       - name: Get dependencies
         run: flutter pub get
-
       - name: Build APK
-        # આપણે મેન્યુઅલી બધું સેટ કર્યું હોવાથી સીધું બિલ્ડ કરી શકાય
-     run: flutter build apk --release --no-shrink
-
+        run: flutter build apk --release --no-shrink
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: hotel-app-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
