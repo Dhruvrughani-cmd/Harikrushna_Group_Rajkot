@@ -32,7 +32,7 @@ jobs:
 
       - name: Build APK
         # આપણે મેન્યુઅલી બધું સેટ કર્યું હોવાથી સીધું બિલ્ડ કરી શકાય
-        run: flutter build apk --debug
+     run: flutter build apk --release --no-shrink
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
